@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="table.css">
+        <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    </head>
+    <body class="bg-dark">
+        <div>
+            <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">User Details</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table table-bordered table-dark table-hover">
+						  <thead>
+						    <tr>
+						      <th>Id</th>
+						      <th>User Name</th>
+						      <th>Email Id</th>
+						      <th>Phone Number</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						       <tr th:each="list :${list}"> 
+                                                            <td th:text="${list.userId}">ID</td>
+                                                            <td th:text="${list.userName}">name</td>
+                                                            <td th:text="${list.userEmail}">year</td>
+                                                            <td th:text="${list.userPhoneno}">dep</td>
+                                                       </tr>
+                                                    </tr>
+						  </tbody>
+						</table>
+					</div>
+                                    <div class="text-center">
+                                        <div class="container">
+                                            <div class="row">
+                                              <div class="col-sm">
+                                                <button class="btn-primary"><a class="btn-primary" th:href="@{collaborationDetails}">View Collaboration Team</a></button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                    </div>
+                                    
+				</div>
+			</div>
+		</div>
+	</section>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js" integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js" integrity="sha256-DI6NdAhhFRnO2k51mumYeDShet3I8AKCQf/tf7ARNhI=" crossorigin="anonymous"></script>
+   
+                                        <div class="container">
+                                            <div class="row">
+                                              <div class="col-sm">
+                                                <button class="btn-primary"><a class="btn-primary" th:href="@{logout}">Logout</a></button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                    </div>
+    </body>
+</html>
+
+
