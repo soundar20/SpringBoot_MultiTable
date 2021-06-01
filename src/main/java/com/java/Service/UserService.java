@@ -5,7 +5,7 @@ public interface UserService {
 
     void saveUserDetails(User user);
     User findByUserPhoneNo(String userPhoneno,String userPass);
-    User getDetailsForCollaboration(String colAdmin);
+    
     
     
     

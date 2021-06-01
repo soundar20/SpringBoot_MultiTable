@@ -24,10 +24,10 @@ and open the template in the editor.
                             <p th:text="${mv}"></p>
                             <p th:text="${error}"></p>
                             <form method="post" th:action="@{/SaveTeamCreation}">
-                            <div class="group"> <label for="userpass" class="label">Creator MailID</label> <input name="coladmin" type="text" class="input" placeholder="Enter your MailID" required> </div>
-                            <div class="group"> <label for="userpass" class="label">Team Name</label> <input name="colname" type="text" class="input" placeholder="Enter your TeamName" required> </div><!-- comment -->
-                            <div class="group"> <label for="userpass" class="label">Creation Date</label> <input name="creationdate" type="date" class="input" placeholder="CreationDate" required> </div>
-                            <div class="group"> <label for="userpass" class="label">Description</label> <input name="coldescription" type="text" class="input" placeholder="Description" required> </div>
+                            <div class="group"> <label for="userpass" class="label">Creator MailID</label> <input name="colAdmin" type="text" class="input" placeholder="Enter your MailID" required> </div>
+                            <div class="group"> <label for="userpass" class="label">Team Name</label> <input name="colName" type="text" class="input" placeholder="Enter your TeamName" required> </div><!-- comment -->
+                            <div class="group"> <label for="userpass" class="label">Creation Date</label> <input name="creationDate" type="date" class="input" placeholder="CreationDate" required> </div>
+                            <div class="group"> <label for="userpass" class="label">Description</label> <input name="colDescription" type="text" class="input" placeholder="Description" required> </div>
                             <div class="group"> <input type="submit" class="button"  value="create"> </div>
                             <div class="hr"></div>
                             </form>

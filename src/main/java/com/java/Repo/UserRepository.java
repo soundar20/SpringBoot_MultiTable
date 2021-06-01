@@ -11,7 +11,6 @@ public interface UserRepository extends CrudRepository<User,Integer>{
     @Query(value="SELECT * FROM user WHERE (user_email=?1 or user_phoneno=?1) AND user_pass=?2",nativeQuery = true)
     public User findByUserPhoneNo(String userPhoneno,String userPass);
     
-    @Query(value="Select * from user where user_email=?1",nativeQuery = true)
-    public User getDetailsForCollaboration(String coladmin);
+    
     
 }

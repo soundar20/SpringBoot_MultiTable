@@ -3,9 +3,10 @@ package com.java.Controller;
 import com.java.Model.CollaborationDetails;
 import com.java.Model.CollaborationUser;
 import com.java.Model.User;
-import com.java.Repo.CollaborationUserRepository;
 import com.java.Service.CollaborationDetailsService;
+import com.java.Service.CollaborationUserService;
 import com.java.Service.UserService;
+import com.java.dto.CollaborationDetailsDTO;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ProjectController {
     CollaborationDetailsService cdService;
     
     @Autowired
-    CollaborationUserRepository cuService;
+    CollaborationUserService cuService;
     
     @RequestMapping("/")
     public ModelAndView index(){
@@ -89,12 +90,11 @@ public class ProjectController {
     @RequestMapping("SaveTeamCreation")
     public ModelAndView SaveTeamCreation(CollaborationDetails colDetails){
         ModelAndView mv=new ModelAndView();
-//       try{
             String colAdmin=colDetails.getColAdmin();
             String colName=colDetails.getColName();
             Date creationDate=colDetails.getCreationDate();
             String colDescription=colDetails.getColDescription();
-            User users=uService.getDetailsForCollaboration(colAdmin);
+            CollaborationDetailsDTO users=cdService.getDetailsForCollaboration(colAdmin);
             System.out.println(users);
             int a=users.getUserId();
             String b=users.getUserName();
@@ -103,56 +103,57 @@ public class ProjectController {
             mv.addObject("mv","you created a team successfully");
             mv.setViewName("CollaborationTeamForm");
             return mv;
-//        }
-//        catch(Exception e){
-//            mv.addObject("error","Your Email Id not found,Please Register first");
-//            return new ModelAndView("CollaborationTeamForm");
-//        }
     }
     
     @RequestMapping("collaborationnewuser")
     public ModelAndView collaborationnewuser(){
         return new ModelAndView("collaborationnewuser");
     }
-//    @RequestMapping("saveColUser")
-//    public ModelAndView saveColUser(CollaborationUser coluser)
-//    {
-//        try{
-//        String teamname=coluser.getCollTeamName();
-//        String mail=coluser.getUserCollMail();
-//        String teamCapacity=cdService.getTeamCapacity(teamname);
-//        String a=collaborationUserRepo.checkUser(mail,teamname);
-//        String b=collaborationUserRepo.checkUser1(mail,teamname);
-//        String c=collaborationDetailsRepo.ownerOrNot(mail,teamname);
-//        String d=collaborationDetailsRepo.ownerOrNot1(mail,teamname); 
-//        int b1=Integer.parseInt(cd);   
-//        if(mail.equals(c) && teamname.equals(d)){
-//            model.addAttribute("owner","Sorry you are the owner");
-//            return "collaborationnewuser";
-//        }
-//        else{
-//        if(coluser.getUsercollmail().equals(a) && coluser.getCollteamname().equals(b)){
-//            model.addAttribute("alreadymember","Sorry the user is alreay in the colloborationTeam");
-//            return "collaborationnewuser";
-//        }
-//        else{
-//            if(b1<5){ 
-//            collaborationUserRepo.save(coluser);
-//            model.addAttribute("successMsg","Congrats you are added in the collaboration team..!");
-//            collaborationDetailsRepo.increaseTeamCapacity(teamname);
-//            return "collaborationnewuser";
-//            } 
-//            else {
-//            model.addAttribute("sorry","the team is full please try another team");
-//            return "collaborationnewuser";
-//            }
-//            }
-//        }
-//        }
-//        catch(Exception e){
-//            model.addAttribute("errorMsg","User not found");
-//            return "collaborationnewuser";
-//        }
-//        
-//    }
+    
+    @RequestMapping("saveColUser")
+    public ModelAndView saveColUser(CollaborationUser coluser)
+    {
+        ModelAndView mv=new ModelAndView();
+        String teamname=coluser.getCollTeamName();
+        String mail=coluser.getUserCollMail();
+        String teamCapacity=cdService.getTeamCapacity(teamname);
+        System.out.print(teamCapacity);
+        String userEmail=cuService.checkUserEmail(mail,teamname);
+        String userTeam=cuService.checkUserTeam(mail,teamname);
+        String colAdmin=cdService.colAdminOwner(mail,teamname);
+        String colName=cdService.colAdminTeamName(mail,teamname);
+         int b1=Integer.parseInt(teamCapacity);   
+        if(mail.equals(colAdmin) && teamname.equals(colName)){
+            mv.addObject("owner","Sorry you are the owner");
+            mv.setViewName("collaborationnewuser");
+            return mv;
+        }
+        else{
+        if(coluser.getUserCollMail().equals(userEmail) && coluser.getCollTeamName().equals(userTeam)){
+            mv.addObject("alreadymember","Sorry the user is already in the colloborationTeam");
+            mv.setViewName("collaborationnewuser");
+            return mv;
+        }
+        else{
+            if(b1<5){ 
+            cuService.saveColUser(coluser);
+            mv.addObject("successMsg","Congrats you are added in the collaboration team..!");
+            cdService.increaseTeamCapacity(teamname);
+            mv.setViewName("collaborationnewuser");
+            return mv;
+            } 
+            else {
+            mv.addObject("sorry","the team is full please try another team");
+            mv.setViewName("collaborationnewuser");
+            return mv;
+            }
+            }
+        } 
+}
+    
+    
+    
+    
+    
+    
 }

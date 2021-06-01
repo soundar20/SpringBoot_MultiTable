@@ -24,10 +24,5 @@ public class UserServiceImpl implements UserService{
         return user;
     } 
     
-    @Override
-    public User getDetailsForCollaboration(String colAdmin){
-        User user=uRepository.getDetailsForCollaboration(colAdmin);
-        System.out.println(user);
-        return user;
-    }
+    
 }
