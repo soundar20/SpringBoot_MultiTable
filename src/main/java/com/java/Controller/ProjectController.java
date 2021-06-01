@@ -7,6 +7,7 @@ import com.java.Service.CollaborationDetailsService;
 import com.java.Service.CollaborationUserService;
 import com.java.Service.UserService;
 import com.java.dto.CollaborationDetailsDTO;
+import com.java.dto.SingleUserDto;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +71,8 @@ public class ProjectController {
         }
         catch(NullPointerException e){
             mv.addObject("alreadythere","Your email or password is incorrect or User not found");
-            return new ModelAndView ("index");
+            mv.setViewName("index");
+            return mv;
     }
 }
      @RequestMapping("collaborationDetails")
@@ -90,6 +92,7 @@ public class ProjectController {
     @RequestMapping("SaveTeamCreation")
     public ModelAndView SaveTeamCreation(CollaborationDetails colDetails){
         ModelAndView mv=new ModelAndView();
+        try{
             String colAdmin=colDetails.getColAdmin();
             String colName=colDetails.getColName();
             Date creationDate=colDetails.getCreationDate();
@@ -103,6 +106,12 @@ public class ProjectController {
             mv.addObject("mv","you created a team successfully");
             mv.setViewName("CollaborationTeamForm");
             return mv;
+            }
+        catch(Exception e){
+            mv.addObject("error","Your Email Id not found,Please Register first");
+            mv.setViewName("CollaborationTeamForm");
+            return mv;
+        }
     }
     
     @RequestMapping("collaborationnewuser")
@@ -114,6 +123,8 @@ public class ProjectController {
     public ModelAndView saveColUser(CollaborationUser coluser)
     {
         ModelAndView mv=new ModelAndView();
+        try
+        {
         String teamname=coluser.getCollTeamName();
         String mail=coluser.getUserCollMail();
         String teamCapacity=cdService.getTeamCapacity(teamname);
@@ -148,12 +159,45 @@ public class ProjectController {
             return mv;
             }
             }
-        } 
+        }
+        }
+        catch(Exception e){
+            mv.addObject("errorMsg","User not found");
+            mv.setViewName("collaborationnewuser");
+            return mv;
+        }
 }
+    @RequestMapping("collaborationuser")
+    public ModelAndView collaborationuser(){
+        ModelAndView mv=new ModelAndView();
+        List<CollaborationUser> colUser=cuService.showCollUser();
+        mv.addObject("mv",colUser);
+        mv.setViewName("showCollaborationUser");
+        return mv;
+    }   
     
+    @RequestMapping("SingleUserDetail")
+    public ModelAndView SingleUserDetail(){
+        return new ModelAndView("SearchCombinedUser");
+    }
     
+    @RequestMapping("showCombinedUser")
+    public ModelAndView showCombinedUser(@RequestParam int id){
+       ModelAndView model=new ModelAndView();
+       List<SingleUserDto> list=uService.getCombinedUser(id);
+       model.addObject("list",list);
+       model.setViewName("showCombinedUser");
+       return model;
+
+    }
     
-    
-    
-    
+    @RequestMapping("logout")
+    public ModelAndView logOut(HttpServletRequest request,HttpServletResponse response){
+        ModelAndView model=new ModelAndView();
+        HttpSession session=request.getSession(false);
+        session.invalidate();
+        model.addObject("logout","You are successfully logged out");
+        model.setViewName("index");
+        return model;
+    }  
 }

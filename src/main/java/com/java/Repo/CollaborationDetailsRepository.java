@@ -28,7 +28,9 @@ public interface CollaborationDetailsRepository extends CrudRepository<Collabora
     
     @Query(value="SELECT col_name FROM collaboration_details where col_admin=?1 and col_name=?2",nativeQuery = true)
     public String colAdminTeamName(String mail, String teamname);
- 
+    
+    @Modifying
+    @Transactional
     @Query("update CollaborationDetails set teamCapacity=teamCapacity+1 where colName=?1")
     public void increaseTeamCapacity(String teamname);
 

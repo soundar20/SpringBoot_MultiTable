@@ -17,10 +17,11 @@
                         <div class="login">
                             <p class="text-success" th:text="${successMsg}"></p>
                             <p class="text-success" th:text="${logout}"></p>
+                            <p class="text-danger" th:text="${alreadythere}"></p>
                             <p class="text-danger" id="shoeMessage" th:text="${lg}"></p>
                             <p class="text-danger" th:text="${br}"></p>
                             <form method="get" th:action="@{/showuserdetails}" th:object="${user}">
-                            <div class="group"> <label for="userphoneno" class="label">Email/Phoneno</label> <input name="userPhoneno" type="text" class="input" placeholder="Enter your Phoneno or Email" required> </div>
+                            <div class="group"> <label for="userphoneno" class="label">Email/Phoneno</label> <input name="userPhoneno" type="Email" class="input" placeholder="Enter your Phoneno or Email" required> </div>
                             <div class="group"> <label for="userpass" class="label">Password</label> <input name="userPass" type="password" class="input" data-type="password" placeholder="Enter your password"  required> </div>
                             <div class="group"> <input id="check" type="checkbox" class="check" checked> <label for="check"><span class="icon"></span> Keep me Signed in</label> </div>
                             <div class="group"> <input type="submit" class="button"  value="Sign In"> </div>
@@ -31,7 +32,6 @@
                         <div class="sign-up-form">
                              <p th:text="${ErrorMsg}"></p>
                             <form name="signUp" method="post" th:action="@{/saveUser}" th:object="${user}">
-                                <p th:text="${ErrorMsg}"></p>
                             <div class="group"> <label for="username" class="label">Username</label> <input name="userName" type="text" class="input" placeholder="Create your Username" required> </div>
                             <div class="group"> <label for="useremail" class="label">Email Address</label> <input name="userEmail" type="email" class="input" placeholder="Create EmailID" required> </div>
                             <div class="group"> <label for="userphoneno" class="label">Phone number</label> <input name="userPhoneno" type="tel" class="input" pattern="[0-9]{10}" placeholder="Create your Phoneno" required> </div>

@@ -23,6 +23,7 @@ public class CollaborationDetailsServiceImpl implements CollaborationDetailsServ
     
     @Override
     public List<CollaborationDetails> showCollaborationDetails() {
+        System.out.println((List<CollaborationDetails>) cdRepository.findAll());
         return (List<CollaborationDetails>) cdRepository.findAll();
     }
     
