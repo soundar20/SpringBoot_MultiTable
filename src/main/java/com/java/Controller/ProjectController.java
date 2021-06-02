@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +32,7 @@ public class ProjectController {
     @Autowired
     CollaborationUserService cuService;
     
-    @RequestMapping("/")
+    @RequestMapping("/index")
     public ModelAndView index(){
        return new ModelAndView("index");
     }
@@ -51,7 +52,7 @@ public class ProjectController {
         }
     }
     
-     @RequestMapping("showuserdetails")
+     @PostMapping("showuserdetails")
     public ModelAndView showUser(@RequestParam String userPhoneno,@RequestParam String userPass,HttpServletRequest request,HttpServletResponse response) throws IOException{
         ModelAndView mv=new ModelAndView();
         try{
@@ -61,7 +62,7 @@ public class ProjectController {
         String pass=users.getUserPass();
             if((userPhoneno.equals(phone) || userPhoneno.equals(email)) && userPass.equals(pass)){
                  HttpSession session=request.getSession();
-                 session.setAttribute("userphone",userPhoneno);
+                 session.setAttribute("pass", pass);
                  System.out.println("Session ID: " + session.getId());
                  mv.addObject("list",users);
                  mv.setViewName("showUserDetails");   
@@ -75,8 +76,12 @@ public class ProjectController {
     }
 }
      @RequestMapping("collaborationDetails")
-    public ModelAndView collaborationDetails(){
+    public ModelAndView collaborationDetails(HttpServletRequest request,HttpServletResponse response) throws IOException{
           ModelAndView mv=new ModelAndView();
+          HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
           List<CollaborationDetails> colDetails=cdService.showCollaborationDetails();
           mv.addObject("mv",colDetails);
           mv.setViewName("CollaborationDetails");
@@ -84,14 +89,22 @@ public class ProjectController {
     }
     
     @RequestMapping("createTeam")
-    public ModelAndView createTeam(){
+    public ModelAndView createTeam(HttpServletRequest request,HttpServletResponse response) throws IOException{
+         HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
         return new ModelAndView ("collaborationTeamForm");
     }
     
     @RequestMapping("SaveTeamCreation")
-    public ModelAndView SaveTeamCreation(CollaborationDetails colDetails){
+    public ModelAndView SaveTeamCreation(CollaborationDetails colDetails,HttpServletRequest request,HttpServletResponse response){
         ModelAndView mv=new ModelAndView();
         try{
+             HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
             String colAdmin=colDetails.getColAdmin();
             String colName=colDetails.getColName();
             Date creationDate=colDetails.getCreationDate();
@@ -114,16 +127,24 @@ public class ProjectController {
     }
     
     @RequestMapping("collaborationnewuser")
-    public ModelAndView collaborationnewuser(){
+    public ModelAndView collaborationnewuser(HttpServletRequest request,HttpServletResponse response) throws IOException{
+         HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
         return new ModelAndView("collaborationnewuser");
     }
     
     @RequestMapping("saveColUser")
-    public ModelAndView saveColUser(CollaborationUser coluser)
+    public ModelAndView saveColUser(CollaborationUser coluser,HttpServletRequest request,HttpServletResponse response)
     {
         ModelAndView mv=new ModelAndView();
         try
         {
+          HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+          response.sendRedirect("index");
+          }
         String teamname=coluser.getCollTeamName();
         String mail=coluser.getUserCollMail();
         String teamCapacity=cdService.getTeamCapacity(teamname);
@@ -167,8 +188,12 @@ public class ProjectController {
         }
 }
     @RequestMapping("collaborationuser")
-    public ModelAndView collaborationuser(){
+    public ModelAndView collaborationuser(HttpServletRequest request,HttpServletResponse response) throws IOException{
         ModelAndView mv=new ModelAndView();
+         HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
         List<CollaborationUser> colUser=cuService.showCollUser();
         mv.addObject("mv",colUser);
         mv.setViewName("showCollaborationUser");
@@ -176,13 +201,21 @@ public class ProjectController {
     }   
     
     @RequestMapping("SingleUserDetail")
-    public ModelAndView SingleUserDetail(){
+    public ModelAndView SingleUserDetail(HttpServletRequest request,HttpServletResponse response) throws IOException{
+         HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
         return new ModelAndView("SearchCombinedUser");
     }
     
     @RequestMapping("showCombinedUser")
-    public ModelAndView showCombinedUser(@RequestParam int id){
+    public ModelAndView showCombinedUser(@RequestParam int id,HttpServletRequest request,HttpServletResponse response) throws IOException{
        ModelAndView model=new ModelAndView();
+        HttpSession session=request.getSession();
+          if(session.getAttribute("pass")==null){
+              response.sendRedirect("index");
+          }
        List<SingleUserDto> list=uService.getCombinedUser(id);
        model.addObject("list",list);
        model.setViewName("showCombinedUser");
@@ -195,6 +228,7 @@ public class ProjectController {
         ModelAndView model=new ModelAndView();
         HttpSession session=request.getSession(false);
         session.invalidate();
+        System.out.println("Logged out from the session");
         model.addObject("logout","You are successfully logged out");
         model.setViewName("index");
         return model;
