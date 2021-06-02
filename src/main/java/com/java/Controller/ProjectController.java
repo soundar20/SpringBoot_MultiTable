@@ -1,5 +1,4 @@
 package com.java.Controller;
-
 import com.java.Model.CollaborationDetails;
 import com.java.Model.CollaborationUser;
 import com.java.Model.User;
